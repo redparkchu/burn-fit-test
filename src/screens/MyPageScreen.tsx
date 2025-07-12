@@ -1,10 +1,12 @@
-import { View, Text } from "react-native";
+import { SafeAreaView, View, Text } from "react-native";
 import { CommonStyles } from "../styles/Common.styles";
 
 export default function MyPageScreen() {
     return (
-        <View style={CommonStyles.container}>
-            <Text>My Page</Text>
-        </View>
+        <SafeAreaView style={CommonStyles.screen}>
+            <View style={CommonStyles.center}>
+                <Text>My Page</Text>
+            </View>
+        </SafeAreaView>
     )
 }
