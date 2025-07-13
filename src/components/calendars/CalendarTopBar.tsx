@@ -1,25 +1,35 @@
 import { View, Text } from "react-native";
 import { CalendarStyles } from "../../styles/calendars/Calendar.styles";
 import ArrowButton from "./ArrowButton";
-
-const testFunction = () => {
-    alert("버튼이 눌렸다옹");
-}
+import Calendar, { DateUtil } from "../../utils/Calendar";
 
 type Props = {
-    month: number,
-    year: number
+    dateUtil: DateUtil,
+    setDateUtil: (dateUtil: DateUtil) => void
 }
 
 export default function CalendarTopBar(props: Props) {
-    const monthName = getMonthName(props.month);
-    const year = props.year;
+    const month = props.dateUtil.month
+    const monthName = getMonthName(month);
+    const year = props.dateUtil.year;
+
+    const prevMonth = () => {
+        const prevDate = Calendar.getPrev(month, year);
+        const dateUtil = { month: prevDate.getMonth() + 1, year: prevDate.getFullYear() };
+        props.setDateUtil(dateUtil);
+    }
+    
+    const nextMonth = () => {
+        const nextDate = Calendar.getNext(month, year);
+        const dateUtil = { month: nextDate.getMonth() + 1, year: nextDate.getFullYear() };
+        props.setDateUtil(dateUtil);
+    }
 
     return (
         <View style={CalendarStyles.topBar}>
-            <ArrowButton direction="left" onPress={testFunction} />
+            <ArrowButton direction="left" onPress={prevMonth} />
             <Text style={CalendarStyles.dateText}>{monthName} {year}</Text>
-            <ArrowButton direction="right" onPress={testFunction} />
+            <ArrowButton direction="right" onPress={nextMonth} />
         </View>
     )
 }

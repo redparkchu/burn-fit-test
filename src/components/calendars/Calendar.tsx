@@ -1,12 +1,11 @@
 import { View, Text } from "react-native";
 import { CalendarStyles } from "../../styles/calendars/Calendar.styles";
 import { ColorStyles } from "../../styles/Color.styles";
-import CalendarUtil from "../../utils/Calendar";
+import CalendarUtil, { DateUtil } from "../../utils/Calendar";
 import Week from "./Week";
 
 type Props = {
-    month: number,
-    year: number
+    dateUtil: DateUtil
 }
 
 export type StyledDate = {
@@ -15,7 +14,7 @@ export type StyledDate = {
 }
 
 export default function Calendar(props: Props) {
-    const calendarUtil = new CalendarUtil(props.year, props.month);
+    const calendarUtil = new CalendarUtil(props.dateUtil);
     const styledDates = toStyledDates(calendarUtil.weeks);
 
     return (

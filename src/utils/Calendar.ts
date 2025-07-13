@@ -1,3 +1,8 @@
+export type DateUtil = {
+    month: number,
+    year: number
+}
+
 export default class Calendar {
     date: Date;
     lastDate: number;
@@ -5,11 +10,11 @@ export default class Calendar {
     month: number;
     weeks: number[][];
     
-    constructor(year: number, month: number) {
-        this.date = new Date(year, month - 1, 1);
-        this.lastDate = new Date(year, month, 0).getDate();
-        this.year = year;
-        this.month = month;
+    constructor(monthYear: DateUtil) {
+        this.date = new Date(monthYear.year, monthYear.month - 1, 1);
+        this.lastDate = new Date(monthYear.year, monthYear.month, 0).getDate();
+        this.year = monthYear.year;
+        this.month = monthYear.month;
         this.weeks = Array(6).fill(0).map(() => Array(7).fill(0));
 
         this.initWeeks();
@@ -34,7 +39,7 @@ export default class Calendar {
     }
 
     fillPrevDate() {
-        const startDate = this.getPrev().getDate() - this.date.getDay() + 1;
+        const startDate = Calendar.getPrev(this.month, this.year).getDate() - this.date.getDay() + 1;
         const week = this.weeks[0];
         let dayIndex = 0;
 
@@ -58,17 +63,17 @@ export default class Calendar {
         }
     }
 
-    getPrev() {
-        if (this.month > 1) {
-            return new Date(this.year, this.month - 1, 0);
+    static getPrev(month: number, year: number) {
+        if (month > 1) {
+            return new Date(year, month - 1, 0);
         }
-        return new Date(this.year, 0, 0);
+        return new Date(year, 0, 0);
     }
     
-    // getNext() {
-    //     if (this.month < 12) {
-    //         return new Date(this.year, this.month, 1);
-    //     }
-    //     return new Date(this.year + 1, 0, 1);
-    // }
+    static getNext(month: number, year: number) {
+        if (month < 12) {
+            return new Date(year, month, 1);
+        }
+        return new Date(year + 1, 0, 1);
+    }
 }
