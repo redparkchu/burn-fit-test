@@ -16,27 +16,54 @@ export default class Calendar {
     }
 
     initWeeks() {
-        let day = this.date.getDay();
+        let dayIndex = this.date.getDay();
         let weekIndex = 0;
         let date = 1;
 
         while (date <= this.lastDate) {
-            this.weeks[weekIndex][day] = date;
+            this.weeks[weekIndex][dayIndex] = date;
             date++;
-            day++;
-            if (day === 7) {
-                day = 0;
+            dayIndex++;
+            if (dayIndex === 7) {
+                dayIndex = 0;
+                weekIndex++;
+            }
+        }
+        this.fillPrevDate();
+        this.fillNextDate(weekIndex, dayIndex);
+    }
+
+    fillPrevDate() {
+        const startDate = this.getPrev().getDate() - this.date.getDay() + 1;
+        const week = this.weeks[0];
+        let dayIndex = 0;
+
+        while (week[dayIndex] === 0) {
+            week[dayIndex] = startDate + dayIndex;
+            dayIndex++;
+        }
+    }
+
+    fillNextDate(weekIndex: number, dayIndex: number) {
+        let date = 1;
+        
+        while (weekIndex < 6) {
+            this.weeks[weekIndex][dayIndex] = date;
+            date++;
+            dayIndex++;
+            if (dayIndex === 7) {
+                dayIndex = 0;
                 weekIndex++;
             }
         }
     }
 
-    // getPrev() {
-    //     if (this.month > 1) {
-    //         return new Date(this.year, this.month - 1, 0);
-    //     }
-    //     return new Date(this.year, 0, 0);
-    // }
+    getPrev() {
+        if (this.month > 1) {
+            return new Date(this.year, this.month - 1, 0);
+        }
+        return new Date(this.year, 0, 0);
+    }
     
     // getNext() {
     //     if (this.month < 12) {

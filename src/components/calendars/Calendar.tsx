@@ -37,8 +37,18 @@ export default function Calendar(props: Props) {
 }
 
 function toStyledDates(weeks: number[][]): StyledDate[][] {
+    let color = ColorStyles.gray_30;
     const styledDates = weeks.map((week) => {
-        return week.map((date) => ({date: date, color: ColorStyles.gray}));
+        return week.map((date) => {
+            if (date === 1) {
+                color = changeColor(color);
+            }
+            return {date: date, color: color}
+        });
     });
     return styledDates;
+}
+
+function changeColor(color: any) {
+    return color === ColorStyles.gray_30 ? ColorStyles.gray : ColorStyles.gray_30;
 }
