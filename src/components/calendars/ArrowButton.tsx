@@ -10,7 +10,7 @@ export default function ArroButton(props: Props) {
     const iconName = props.direction === "left" ? "arrow-back-ios-new" : "arrow-forward-ios";
 
     return (
-        <TouchableOpacity onPress={props.onPress} style={ {marginLeft: 20, marginRight: 20} }>
+        <TouchableOpacity onPress={props.onPress}>
             <Icon name={iconName} size={20} color="#0eb4fc"></Icon>
         </TouchableOpacity>
     )

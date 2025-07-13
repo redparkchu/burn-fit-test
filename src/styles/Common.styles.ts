@@ -13,23 +13,5 @@ export const CommonStyles = StyleSheet.create({
         flex:1,
         justifyContent: 'center',
         alignItems: 'center',
-    },
-    table: {
-        margin: 20,
-        borderWidth: 1,
-        borderColor: '#999'
-    },
-    header: {
-        backgroundColor: '#eee'
-    },
-    row: {
-        flexDirection: 'row'
-    },
-    cell: {
-        flex: 1,
-        padding: 10,
-        borderWidth: 1,
-        borderColor: '#999',
-        textAlign: 'center'
     }
 });
