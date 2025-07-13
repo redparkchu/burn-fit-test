@@ -16,8 +16,23 @@ export const CalendarStyles = StyleSheet.create({
         padding: 5
     },
     cell: {
-        flex: 1,
+        width: 30,
+        height: 30,
         textAlign: 'center',
-        padding: 5
+        margin: 'auto'
+    },
+    selected: {
+        width: 30,
+        height: 30,
+        borderWidth: 1,
+        borderColor: "#0eb4fc",
+        borderRadius: 50,
+    },
+    unselected: {
+        width: 30,
+        height: 30,
+        borderWidth: 1,
+        borderColor: 'transparent',
+        borderRadius: 50,
     }
 });
