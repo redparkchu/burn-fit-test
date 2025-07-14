@@ -6,19 +6,19 @@ import Week from "./Week";
 import { useState } from "react";
 
 type Props = {
-    dateUtil: DateUtil
+    year: number,
+    month: number
 }
 
 export type StyledDate = {
-    date: number,
+    date: DateUtil,
     color: any
 }
 
 export default function Calendar(props: Props) {
-    const calendarUtil = new CalendarUtil(props.dateUtil);
+    const calendarUtil = new CalendarUtil(props.year, props.month);
     const styledDates = toStyledDates(calendarUtil.weeks);
     const [selectedDate, setSelectedDate] = useState("");
-    const id = `${props.dateUtil.year}-${props.dateUtil.month}`
 
     return (
         <View>
@@ -32,17 +32,17 @@ export default function Calendar(props: Props) {
                 <Text style={[CalendarStyles.cell, ColorStyles.skyBlue]}>Sat</Text>
             </View>
             {styledDates.map((item, index) => (
-                <Week key={`${id}-${index}`} id={id} styledDates={item} selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
+                <Week key={index} styledDates={item} selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
             ))}
         </View>
     )
 }
 
-function toStyledDates(weeks: number[][]): StyledDate[][] {
+function toStyledDates(weeks: DateUtil[][]): StyledDate[][] {
     let color = ColorStyles.gray_30;
     const styledDates = weeks.map((week) => {
         return week.map((date) => {
-            if (date === 1) {
+            if (date.date === 1) {
                 color = changeColor(color);
             }
             return {date: date, color: color}

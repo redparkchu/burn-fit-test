@@ -1,34 +1,34 @@
 import { View, Text } from "react-native";
 import { CalendarStyles } from "../../styles/calendars/Calendar.styles";
 import ArrowButton from "./ArrowButton";
-import Calendar, { DateUtil } from "../../utils/Calendar";
+import Calendar, { MonthYear } from "../../utils/Calendar";
 
 type Props = {
-    dateUtil: DateUtil,
-    setDateUtil: (dateUtil: DateUtil) => void
+    monthYear: MonthYear,
+    setMonthYear: (monthYear: MonthYear) => void
 }
 
 export default function CalendarTopBar(props: Props) {
-    const month = props.dateUtil.month
+    const month = props.monthYear.month
     const monthName = getMonthName(month);
-    const year = props.dateUtil.year;
+    const year = props.monthYear.year;
 
     const prevMonth = () => {
         const prevDate = Calendar.getPrev(month, year);
-        const dateUtil = { month: prevDate.getMonth() + 1, year: prevDate.getFullYear() };
-        props.setDateUtil(dateUtil);
+        const monthYear = { month: prevDate.getMonth() + 1, year: prevDate.getFullYear() };
+        props.setMonthYear(monthYear);
     }
     
     const nextMonth = () => {
         const nextDate = Calendar.getNext(month, year);
-        const dateUtil = { month: nextDate.getMonth() + 1, year: nextDate.getFullYear() };
-        props.setDateUtil(dateUtil);
+        const monthYear = { month: nextDate.getMonth() + 1, year: nextDate.getFullYear() };
+        props.setMonthYear(monthYear);
     }
 
     return (
         <View style={CalendarStyles.topBar}>
             <ArrowButton direction="left" onPress={prevMonth} />
-            <Text style={CalendarStyles.dateText}>{monthName} {year}</Text>
+            <Text style={CalendarStyles.topBarText}>{monthName} {year}</Text>
             <ArrowButton direction="right" onPress={nextMonth} />
         </View>
     )

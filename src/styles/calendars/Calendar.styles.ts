@@ -6,7 +6,7 @@ export const CalendarStyles = StyleSheet.create({
         justifyContent: 'space-between',
         padding: 20
     },
-    dateText: {
+    topBarText: {
         fontSize: 16,
         fontWeight: 500,
         lineHeight: 20
@@ -26,13 +26,22 @@ export const CalendarStyles = StyleSheet.create({
         height: 30,
         borderWidth: 1,
         borderColor: "#0eb4fc",
-        borderRadius: 50,
+        borderRadius: 50
     },
     unselected: {
         width: 30,
         height: 30,
         borderWidth: 1,
         borderColor: 'transparent',
-        borderRadius: 50,
+        borderRadius: 50
+    },
+    dateText: {
+        textAlign: 'center', 
+        lineHeight: 25
+    },
+    dateTextBold: {
+        textAlign: 'center', 
+        lineHeight: 25,
+        fontWeight: 'bold'
     }
 });
