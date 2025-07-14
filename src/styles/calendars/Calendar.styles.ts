@@ -4,7 +4,9 @@ export const CalendarStyles = StyleSheet.create({
     topBar: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        padding: 20
+        padding: 20,
+        backgroundColor: "#fff",
+        zIndex: 1
     },
     topBarText: {
         fontSize: 16,
@@ -43,5 +45,14 @@ export const CalendarStyles = StyleSheet.create({
         textAlign: 'center', 
         lineHeight: 25,
         fontWeight: 'bold'
+    },
+    calendarTab: {
+        flex: 1,
+        borderTopWidth: 1,
+        borderTopColor: '#dee2e6',
+        backgroundColor: '#fff'
+    },
+    week: {
+        height: 40
     }
 });

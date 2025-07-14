@@ -1,12 +1,15 @@
-import { Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity } from "react-native";
 import { CalendarStyles } from "../../styles/calendars/Calendar.styles";
 import { DateUtil } from "../../utils/Calendar";
+import Animated, { SharedValue, useAnimatedStyle } from "react-native-reanimated";
 
 type Props = {
     color: any,
     date: DateUtil,
     selectedDate: string,
-    setSelectedDate: (selecteDate: string) => void
+    setSelectedDate: (selecteDate: string) => void,
+    translateY: SharedValue<number>,
+    isTarget: boolean
 }
 
 export default function Date(props: Props) {
@@ -17,11 +20,18 @@ export default function Date(props: Props) {
         props.setSelectedDate(date.id);
     }
 
+    const animatedStyle = useAnimatedStyle(() => {
+        const opacity = props.isTarget ? 1 : 1 - props.translateY.value / -190
+        return {
+            opacity: opacity,
+        }
+    });
+
     return (
         <TouchableOpacity onPress={handleClick} style={CalendarStyles.cell}>
-            <View style={selectedStyle}>
+            <Animated.View style={[selectedStyle, animatedStyle]}>
                 <Text style={[dateTextStyle, props.color]}>{date.date}</Text>
-            </View>
+            </Animated.View>
         </TouchableOpacity>
     )
 }

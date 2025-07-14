@@ -4,10 +4,12 @@ import { ColorStyles } from "../../styles/Color.styles";
 import CalendarUtil, { DateUtil } from "../../utils/Calendar";
 import Week from "./Week";
 import { useState } from "react";
+import { SharedValue } from "react-native-reanimated";
 
 type Props = {
     year: number,
-    month: number
+    month: number,
+    translateY: SharedValue<number>
 }
 
 export type StyledDate = {
@@ -22,7 +24,7 @@ export default function Calendar(props: Props) {
 
     return (
         <View>
-            <View style={CalendarStyles.row}>
+            <View style={[CalendarStyles.row, {zIndex: 1, backgroundColor: "#fff"}]}>
                 <Text style={[CalendarStyles.cell, ColorStyles.red]}>Sun</Text>
                 <Text style={[CalendarStyles.cell, ColorStyles.gray_60]}>Mon</Text>
                 <Text style={[CalendarStyles.cell, ColorStyles.gray_60]}>Tue</Text>
@@ -32,7 +34,13 @@ export default function Calendar(props: Props) {
                 <Text style={[CalendarStyles.cell, ColorStyles.skyBlue]}>Sat</Text>
             </View>
             {styledDates.map((item, index) => (
-                <Week key={index} styledDates={item} selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
+                <Week key={index} 
+                    index={index} 
+                    styledDates={item} 
+                    selectedDate={selectedDate} 
+                    setSelectedDate={setSelectedDate} 
+                    translateY={props.translateY}
+                />
             ))}
         </View>
     )

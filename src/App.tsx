@@ -1,5 +1,6 @@
-import { NavigationContainer } from '@react-navigation/native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar, View } from 'react-native';
 import BottomTabNavigator from './navigation/BottomTabNavigator';
 import { CommonStyles } from './styles/Common.styles';
@@ -7,13 +8,15 @@ import { CommonStyles } from './styles/Common.styles';
 
 export default function App() {
     return (
-        <SafeAreaProvider>
-            <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
-            <View style={CommonStyles.app}>
-                <NavigationContainer>
-                    <BottomTabNavigator />
-                </NavigationContainer>
-            </View>
-        </SafeAreaProvider>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+            <SafeAreaProvider>
+                <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
+                <View style={CommonStyles.app}>
+                    <NavigationContainer>
+                        <BottomTabNavigator />
+                    </NavigationContainer>
+                </View>
+            </SafeAreaProvider>
+        </GestureHandlerRootView>
     );
 }
