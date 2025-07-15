@@ -17,7 +17,7 @@ export default function CalendarScreen() {
 
     let targetTranslateY = 0;
     const panGesture = Gesture.Pan()
-        .onStart((event) => {
+        .onStart(() => {
             startY.value = translateY.value;
         })
         .onUpdate((event) => {
@@ -31,7 +31,7 @@ export default function CalendarScreen() {
             }
             translateY.value = targetTranslateY;
         })
-        .onEnd((event, sucess) => {
+        .onEnd(() => {
             const dragDistance = startY.value - translateY.value;
             if (translateY.value < -160 || (startY.value === 0 && dragDistance > 60)) {
                 translateY.value = withTiming(-190);

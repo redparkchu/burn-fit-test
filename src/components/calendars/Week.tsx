@@ -8,18 +8,17 @@ type Props = {
     styledDates: StyledDate[],
     selectedDate: string,
     setSelectedDate: (selectedDate: string) => void,
-    translateY: SharedValue<number>
+    translateY: SharedValue<number>,
+    targetIndex: number
 }
 
 export default function Week(props: Props) {
-    const targetIndex = 1;
-
     const animatedStyle = useAnimatedStyle(() => {
-        const test = targetIndex * 40;
-        const test2 = test * props.translateY.value / -190
+        const distance = props.targetIndex * 40;
+        const translateY = -(distance * props.translateY.value / -190)
         return {
             transform: [
-                { translateY: -test2 },
+                { translateY: translateY },
             ]
         }
     });
@@ -32,7 +31,7 @@ export default function Week(props: Props) {
                     selectedDate={props.selectedDate} 
                     setSelectedDate={props.setSelectedDate} 
                     translateY={props.translateY}
-                    isTarget={props.index === targetIndex}
+                    isTarget={props.index === props.targetIndex}
                 />
             ))}
         </Animated.View>

@@ -20,7 +20,8 @@ export type StyledDate = {
 export default function Calendar(props: Props) {
     const calendarUtil = new CalendarUtil(props.year, props.month);
     const styledDates = toStyledDates(calendarUtil.weeks);
-    const [selectedDate, setSelectedDate] = useState("");
+    const [selectedDate, setSelectedDate] = useState(DateUtil.getTodayId());
+    const targetIndex = calendarUtil.getWeekIndexByDateId(selectedDate);
 
     return (
         <View>
@@ -40,6 +41,7 @@ export default function Calendar(props: Props) {
                     selectedDate={selectedDate} 
                     setSelectedDate={setSelectedDate} 
                     translateY={props.translateY}
+                    targetIndex={targetIndex}
                 />
             ))}
         </View>

@@ -22,6 +22,12 @@ export class DateUtil {
             && this.month === today.getMonth() + 1 
             && this.date === today.getDate();
     }
+
+    static getTodayId() {
+        const today = new Date();
+        const id = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
+        return id;
+    }
 }
 
 export default class Calendar {
@@ -88,6 +94,16 @@ export default class Calendar {
                 weekIndex++;
             }
         }
+    }
+
+    getWeekIndexByDateId(dateId: string) {
+        let targetIndex = this.weeks[0][0].date === 1 ? 0 : 1;
+        this.weeks.forEach((week, index) => {
+            if (week.some((date) => date.id === dateId)) {
+                targetIndex = index;
+            }
+        });
+        return targetIndex
     }
 
     static getPrev(month: number, year: number) {
