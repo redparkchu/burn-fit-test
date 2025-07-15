@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons, Ionicons, FontAwesome5 } from '@expo/vector-icons';
 import HomeScreen from '../screens/HomeScreen';
-import CalendarScreen from '../screens/CalendarScreen';
+import CalendarScreen from '../screens/calendars/CalendarScreen';
 import LibraryScreen from '../screens/LibraryScreen';
 import MyPageScreen from '../screens/MyPageScreen';
 
