@@ -1,41 +1,50 @@
 import { View, Text } from "react-native";
 import { CalendarStyles } from "../../styles/calendars/Calendar.styles";
-import CalendarData, { MonthYear } from "../../data/calendars/CalendarData";
+import CalendarData, { YearMonth } from "../../data/calendars/CalendarData";
 import ArrowButton from "./ArrowButton";
 
 type Props = {
-    monthYear: MonthYear,
-    setMonthYear: (monthYear: MonthYear) => void
+    calendar: CalendarData,
+    setYearMonth: (yearMonth: YearMonth) => void
 }
 
 export default function CalendarTopBar(props: Props) {
-    const month = props.monthYear.month
-    const monthName = getMonthName(month);
-    const year = props.monthYear.year;
+    const calendar = props.calendar;
+    const monthName = calendar.getMonthName();
 
     const prevMonth = () => {
-        const prevDate = CalendarData.getPrev(month, year);
-        const monthYear = { month: prevDate.getMonth() + 1, year: prevDate.getFullYear() };
-        props.setMonthYear(monthYear);
+        const prevDate = calendar.getPrevMonth();
+        const yearMonth = { year: prevDate.getFullYear(), month: prevDate.getMonth() + 1 };
+        props.setYearMonth(yearMonth);
+    }
+
+    const nextMonth = () => {
+        const nextDate = calendar.getNextMonth();
+        const yearMonth = { year: nextDate.getFullYear(), month: nextDate.getMonth() + 1 };
+        props.setYearMonth(yearMonth);
+    }
+
+    const prevWeek = () => {
+        const prevDate = calendar.getPrevWeek();
+        const yearMonth = { year: prevDate.getFullYear(), month: prevDate.getMonth() + 1 };
+        props.setYearMonth(yearMonth);
+        calendar.saveWeekIndex();
     }
     
-    const nextMonth = () => {
-        const nextDate = CalendarData.getNext(month, year);
-        const monthYear = { month: nextDate.getMonth() + 1, year: nextDate.getFullYear() };
-        props.setMonthYear(monthYear);
+    const nextWeek = () => {
+        const nextDate = calendar.getNextWeek();
+        const yearMonth = { year: nextDate.getFullYear(), month: nextDate.getMonth() + 1 };
+        props.setYearMonth(yearMonth);
+        calendar.saveWeekIndex();
     }
+
+    const handleClick = calendar.mode === "month" ? {prev: prevMonth, next: nextMonth} : {prev: prevWeek, next: nextWeek};
 
     return (
         <View style={CalendarStyles.topBar}>
-            <ArrowButton direction="left" onPress={prevMonth} />
-            <Text style={CalendarStyles.topBarText}>{monthName} {year}</Text>
-            <ArrowButton direction="right" onPress={nextMonth} />
+            <ArrowButton direction="left" onPress={handleClick.prev} />
+            <Text style={CalendarStyles.topBarText}>{monthName} {calendar.year}</Text>
+            <ArrowButton direction="right" onPress={handleClick.next} />
         </View>
     )
-}
-
-function getMonthName(month: number) {
-    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-
-    return monthNames[month - 1];
 }

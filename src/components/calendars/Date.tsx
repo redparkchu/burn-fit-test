@@ -9,15 +9,17 @@ type Props = {
     date: DateData,
     isDisplayed: boolean,
     translateY: SharedValue<number>,
+    weekIndex: number
 }
 
 export default function Date(props: Props) {
-    const calendarData = props.calendar;
+    const calendar = props.calendar;
     const date = props.date;
-    const selectedStyle = calendarData.isSelected(date.id) ? CalendarStyles.selected : CalendarStyles.unselected;
+    const selectedStyle = calendar.isSelected(date.id) ? CalendarStyles.selected : CalendarStyles.unselected;
     const dateTextStyle = date.isToday() ? CalendarStyles.dateTextBold : CalendarStyles.dateText;
     const handleClick = () => {
-        calendarData.setSelectedDateId(date.id);
+        calendar.setSelectedDateId(date.id);
+        calendar.setWeekIndex(props.weekIndex);
     }
 
     const animatedStyle = useAnimatedStyle(() => {

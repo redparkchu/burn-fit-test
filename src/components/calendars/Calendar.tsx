@@ -8,15 +8,15 @@ import DateData from "../../data/calendars/DateData";
 import Week from "./Week";
 
 type Props = {
-    year: number,
-    month: number,
-    translateY: SharedValue<number>,
-    calendarMode: string
+    calendar: CalendarData,
+    translateY: SharedValue<number>
 }
 
 export default function Calendar(props: Props) {
+    const calendar = props.calendar;
     const [selectedDateId, setSelectedDateId] = useState(DateData.getTodayId());
-    const calendar = new CalendarData(props.year, props.month, selectedDateId, setSelectedDateId);
+    calendar.selectedDateId = selectedDateId;
+    calendar.setSelectedDateId = setSelectedDateId;
     calendar.changeStyled();
     const weekIndexs = [...Array(6).keys()];
 

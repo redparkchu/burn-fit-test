@@ -12,13 +12,13 @@ type Props = {
 export default function Week(props: Props) {
     const calendarData = props.calendar;
     const week = calendarData.getWeekByIndex(props.index);
-    const targetIndex = calendarData.getWeekIndexByDateId();
+    const targetIndex = calendarData.weekIndex;
     const animatedStyle = useAnimatedStyle(() => {
         const distance = targetIndex * 40;
-        const translateY = -(distance * props.translateY.value / -190)
+        const translateY = -(distance * props.translateY.value / -190);
         return {
             transform: [
-                { translateY: translateY },
+                { translateY: translateY }
             ]
         }
     });
@@ -31,6 +31,7 @@ export default function Week(props: Props) {
                     date={date}
                     isDisplayed={props.index === targetIndex}
                     translateY={props.translateY}
+                    weekIndex={props.index}
                 />
             ))}
         </Animated.View>

@@ -1,14 +1,9 @@
 import { ColorStyles } from "../../styles/Color.styles";
 import DateData from "./DateData";
 
-export type MonthYear = {
-    month: number,
-    year: number
-}
-
-export type StyledDate = {
-    date: DateData,
-    color: any
+export type YearMonth = {
+    year: number,
+    month: number
 }
 
 export default class CalendarData {
@@ -17,23 +12,29 @@ export default class CalendarData {
     year: number;
     month: number;
     weeks: DateData[][];
-    selectedDateId: string = "";
-    setSelectedDateId: ((dateId: string) => void) = (dateId: string) => { this.selectedDateId = dateId };
+    weekIndex: number;
+    setWeekIndex: (weekIndex: number) => void;
+    mode: string;
+    selectedDateId: string;
+    setSelectedDateId: ((dateId: string) => void);
     
     constructor(
         year: number, 
-        month: number, 
-        selectedDateId: string = "", 
-        setSelectedDateId: ((dateId: string) => void) = (dateId: string) => { this.selectedDateId = dateId }
+        month: number,
+        weekIndex: number = 0,
+        setWeekIndex: (weekIndex: number) => void,
+        mode: string = "month"
     ) {
         this.date = new Date(year, month - 1, 1);
         this.lastDate = new Date(year, month, 0).getDate();
         this.year = year;
         this.month = month;
         this.weeks = Array(6).fill(0).map(() => Array(7).fill(new DateData(0, 0, 0)));
-        this.selectedDateId = selectedDateId;
-        this.setSelectedDateId = setSelectedDateId;
-
+        this.weekIndex = weekIndex;
+        this.setWeekIndex = setWeekIndex;
+        this.mode = mode;
+        this.selectedDateId = "";
+        this.setSelectedDateId = (dateId: string) => { this.selectedDateId = dateId };
         this.initWeeks();
     }
 
@@ -56,10 +57,10 @@ export default class CalendarData {
     }
 
     fillPrevDate() {
-        const prevDate = CalendarData.getPrev(this.month, this.year);
+        const prevDate = CalendarData.getPrev(this.year, this.month);
         const year = prevDate.getFullYear();
         const month = prevDate.getMonth() + 1;
-        const startDate = CalendarData.getPrev(this.month, this.year).getDate() - this.date.getDay() + 1;
+        const startDate = CalendarData.getPrev(this.year, this.month).getDate() - this.date.getDay() + 1;
         const week = this.weeks[0];
         let dayIndex = 0;
 
@@ -70,7 +71,7 @@ export default class CalendarData {
     }
 
     fillNextDate(weekIndex: number, dayIndex: number) {
-        const nextDate = CalendarData.getNext(this.month, this.year);
+        const nextDate = CalendarData.getNext(this.year, this.month);
         const year = nextDate.getFullYear();
         const month = nextDate.getMonth() + 1;
         let date = 1;
@@ -86,49 +87,114 @@ export default class CalendarData {
         }
     }
 
-    changeStyled() {
-        let color = ColorStyles.gray_30;
+    getMonthName() {
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
+        return monthNames[this.month - 1];
+    }
+
+    getPrevMonth() {
+        return CalendarData.getPrev(this.year, this.month);
+    }
+
+    getNextMonth() {
+        return CalendarData.getNext(this.year, this.month);
+    }
+
+    getPrevWeek() {
+        if (this.weekIndex > 1) {
+            this.weekIndex -= 1;
+            return this.date;
+        }
+
+        const prevDate = CalendarData.getPrev(this.year, this.month);
+        const firstDate = this.weeks[this.weekIndex][0].date;
+        const lastWeekIndex: number = CalendarData.getLastWeekIndex(prevDate);
+
+        if (this.weekIndex === 0 && firstDate !== 1) {
+            this.weekIndex = lastWeekIndex - 1;
+            return CalendarData.getPrev(this.year, this.month);
+        }
+        this.weekIndex = lastWeekIndex;
+        return CalendarData.getPrev(this.year, this.month);
+}
+
+    static getLastWeekIndex(date: Date) {
+        const lastDate = date.getDate();
+        const day =date.getDay();
+
+        if (lastDate === 28 && day === 6) {
+            return 3;
+        }
+        if (lastDate === 30 && day === 0) {
+            return 5;
+        }
+        if (lastDate === 31 && day <= 1) {
+            return 5
+        }
+        return 4;
+    }
+
+    getNextWeek() {
+        const week = this.weeks[this.weekIndex];
+        if (week.some((date) => date.isIt(this.year, this.month, this.lastDate))) {
+            if (week[6].date === this.lastDate) {
+                this.weekIndex = 0;
+            }
+            this.weekIndex = 1;
+            return CalendarData.getNext(this.year, this.month);
+        }
+        this.weekIndex += 1;
+        return this.date;
+    }
+
+    saveWeekIndex() {
+        this.setWeekIndex(this.weekIndex);
+    }
+
+    changeStyled() {
         this.weeks.forEach((week) => {
             week.forEach((date) => {
-                if (date.date === 1) {
-                    color = this.changeColor(color);
-                }
-                date.setColor(color);
+                this.setColorByMode(date);
             });
         });
     }
-    
-    changeColor(color: any) {
-        return color === ColorStyles.gray_30 ? ColorStyles.gray : ColorStyles.gray_30;
+
+    setColorByMode(date: DateData) {
+        if (this.mode === "week") {
+            date.setColor(ColorStyles.gray);
+        } else {
+            date.setColorByYearMonth(this.year, this.month);
+        }
     }
 
     getWeekByIndex(index: number) {
         return this.weeks[index];
     }
 
-    getWeekIndexByDateId() {
-        let targetIndex = this.weeks[0][0].date === 1 ? 0 : 1;
-        this.weeks.forEach((week, index) => {
-            if (week.some((date) => date.id === this.selectedDateId)) {
-                targetIndex = index;
-            }
-        });
-        return targetIndex
+    changeWeekIndex() {
+        if (this.mode === "month") {
+            this.weekIndex = this.weeks[0][0].date === 1 ? 0 : 1;
+            this.weeks.forEach((week, index) => {
+                if (week.some((date) => date.id === this.selectedDateId)) {
+                    this.weekIndex = index;
+                }
+            });
+        }
     }
 
     isSelected(dateId: string) {
         return this.selectedDateId === dateId;
     }
 
-    static getPrev(month: number, year: number) {
+    static getPrev(year: number, month: number) {
         if (month > 1) {
             return new Date(year, month - 1, 0);
         }
         return new Date(year, 0, 0);
     }
     
-    static getNext(month: number, year: number) {
+    static getNext(year: number, month: number) {
         if (month < 12) {
             return new Date(year, month, 1);
         }

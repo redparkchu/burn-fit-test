@@ -20,8 +20,20 @@ export default class DateData {
         this.color = color
     }
 
+    setColorByYearMonth(year: number, month: number) {
+        if (year === this.year && month === this.month) {
+            this.setColor(ColorStyles.gray);
+        } else {
+            this.setColor(ColorStyles.gray_30);
+        }
+    }
+
     isToday() {
         return this.id === DateData.getTodayId();
+    }
+
+    isIt(year: number, month: number, date: number) {
+        return year === this.year && month === this.month && date === this.date;
     }
 
     static getTodayId() {
