@@ -1,27 +1,27 @@
 import { Text, TouchableOpacity } from "react-native";
-import { CalendarStyles } from "../../styles/calendars/Calendar.styles";
-import { DateUtil } from "../../utils/Calendar";
 import Animated, { SharedValue, useAnimatedStyle } from "react-native-reanimated";
+import { CalendarStyles } from "../../styles/calendars/Calendar.styles";
+import CalendarData from "../../data/calendars/CalendarData";
+import DateData from "../../data/calendars/DateData";
 
 type Props = {
-    color: any,
-    date: DateUtil,
-    selectedDate: string,
-    setSelectedDate: (selecteDate: string) => void,
+    calendar: CalendarData,
+    date: DateData,
+    isDisplayed: boolean,
     translateY: SharedValue<number>,
-    isTarget: boolean
 }
 
 export default function Date(props: Props) {
+    const calendarData = props.calendar;
     const date = props.date;
-    const selectedStyle = props.selectedDate == date.id ? CalendarStyles.selected : CalendarStyles.unselected;
+    const selectedStyle = calendarData.isSelected(date.id) ? CalendarStyles.selected : CalendarStyles.unselected;
     const dateTextStyle = date.isToday() ? CalendarStyles.dateTextBold : CalendarStyles.dateText;
     const handleClick = () => {
-        props.setSelectedDate(date.id);
+        calendarData.setSelectedDateId(date.id);
     }
 
     const animatedStyle = useAnimatedStyle(() => {
-        const opacity = props.isTarget ? 1 : 1 - props.translateY.value / -190
+        const opacity = props.isDisplayed ? 1 : 1 - props.translateY.value / -190;
         return {
             opacity: opacity,
         }
@@ -30,7 +30,7 @@ export default function Date(props: Props) {
     return (
         <TouchableOpacity onPress={handleClick} style={CalendarStyles.cell}>
             <Animated.View style={[selectedStyle, animatedStyle]}>
-                <Text style={[dateTextStyle, props.color]}>{date.date}</Text>
+                <Text style={[dateTextStyle, date.color]}>{date.date}</Text>
             </Animated.View>
         </TouchableOpacity>
     )

@@ -1,7 +1,7 @@
 import { View, Text } from "react-native";
 import { CalendarStyles } from "../../styles/calendars/Calendar.styles";
+import CalendarData, { MonthYear } from "../../data/calendars/CalendarData";
 import ArrowButton from "./ArrowButton";
-import Calendar, { MonthYear } from "../../utils/Calendar";
 
 type Props = {
     monthYear: MonthYear,
@@ -14,13 +14,13 @@ export default function CalendarTopBar(props: Props) {
     const year = props.monthYear.year;
 
     const prevMonth = () => {
-        const prevDate = Calendar.getPrev(month, year);
+        const prevDate = CalendarData.getPrev(month, year);
         const monthYear = { month: prevDate.getMonth() + 1, year: prevDate.getFullYear() };
         props.setMonthYear(monthYear);
     }
     
     const nextMonth = () => {
-        const nextDate = Calendar.getNext(month, year);
+        const nextDate = CalendarData.getNext(month, year);
         const monthYear = { month: nextDate.getMonth() + 1, year: nextDate.getFullYear() };
         props.setMonthYear(monthYear);
     }

@@ -1,27 +1,24 @@
+import { useState } from "react";
 import { View, Text } from "react-native";
+import { SharedValue } from "react-native-reanimated";
 import { CalendarStyles } from "../../styles/calendars/Calendar.styles";
 import { ColorStyles } from "../../styles/Color.styles";
-import CalendarUtil, { DateUtil } from "../../utils/Calendar";
+import CalendarData from "../../data/calendars/CalendarData";
+import DateData from "../../data/calendars/DateData";
 import Week from "./Week";
-import { useState } from "react";
-import { SharedValue } from "react-native-reanimated";
 
 type Props = {
     year: number,
     month: number,
-    translateY: SharedValue<number>
-}
-
-export type StyledDate = {
-    date: DateUtil,
-    color: any
+    translateY: SharedValue<number>,
+    calendarMode: string
 }
 
 export default function Calendar(props: Props) {
-    const calendarUtil = new CalendarUtil(props.year, props.month);
-    const styledDates = toStyledDates(calendarUtil.weeks);
-    const [selectedDate, setSelectedDate] = useState(DateUtil.getTodayId());
-    const targetIndex = calendarUtil.getWeekIndexByDateId(selectedDate);
+    const [selectedDateId, setSelectedDateId] = useState(DateData.getTodayId());
+    const calendar = new CalendarData(props.year, props.month, selectedDateId, setSelectedDateId);
+    calendar.changeStyled();
+    const weekIndexs = [...Array(6).keys()];
 
     return (
         <View>
@@ -34,33 +31,13 @@ export default function Calendar(props: Props) {
                 <Text style={[CalendarStyles.cell, ColorStyles.gray_60]}>Fri</Text>
                 <Text style={[CalendarStyles.cell, ColorStyles.skyBlue]}>Sat</Text>
             </View>
-            {styledDates.map((item, index) => (
+            {weekIndexs.map((index) => (
                 <Week key={index} 
                     index={index} 
-                    styledDates={item} 
-                    selectedDate={selectedDate} 
-                    setSelectedDate={setSelectedDate} 
+                    calendar={calendar}
                     translateY={props.translateY}
-                    targetIndex={targetIndex}
                 />
             ))}
         </View>
     )
-}
-
-function toStyledDates(weeks: DateUtil[][]): StyledDate[][] {
-    let color = ColorStyles.gray_30;
-    const styledDates = weeks.map((week) => {
-        return week.map((date) => {
-            if (date.date === 1) {
-                color = changeColor(color);
-            }
-            return {date: date, color: color}
-        });
-    });
-    return styledDates;
-}
-
-function changeColor(color: any) {
-    return color === ColorStyles.gray_30 ? ColorStyles.gray : ColorStyles.gray_30;
 }

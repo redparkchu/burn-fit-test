@@ -1,10 +1,10 @@
 import { useState } from "react";
-import Calendar from "../components/calendars/Calendar";
-import CalendarTopBar from "../components/calendars/CalendarTopBar";
-import SafeAreaScreen from "./SafeAreaScreen";
-import CalendarTab from "../components/calendars/CalendarTab";
 import { useSharedValue, withTiming } from "react-native-reanimated";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import CalendarTopBar from "../components/calendars/CalendarTopBar";
+import Calendar from "../components/calendars/Calendar";
+import CalendarTab from "../components/calendars/CalendarTab";
+import SafeAreaScreen from "./SafeAreaScreen";
 
 export default function CalendarScreen() {
     const date = new Date();
@@ -43,7 +43,7 @@ export default function CalendarScreen() {
     return (
         <SafeAreaScreen>
             <CalendarTopBar monthYear={monthYear} setMonthYear={setMonthYear} />
-            <Calendar year={monthYear.year} month={monthYear.month} translateY={translateY} />
+            <Calendar year={monthYear.year} month={monthYear.month} translateY={translateY} calendarMode="month" />
             <GestureDetector gesture={panGesture}>
                 <CalendarTab translateY={translateY}/>
             </GestureDetector>

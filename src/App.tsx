@@ -1,9 +1,9 @@
+import { StatusBar, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
-import { StatusBar, View } from 'react-native';
-import BottomTabNavigator from './navigation/BottomTabNavigator';
 import { CommonStyles } from './styles/Common.styles';
+import BottomTabNavigator from './navigation/BottomTabNavigator';
 
 
 export default function App() {

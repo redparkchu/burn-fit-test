@@ -1,6 +1,6 @@
 import { View, Text } from "react-native";
-import { CalendarStyles } from "../../styles/calendars/Calendar.styles";
 import Animated, { SharedValue, useAnimatedStyle } from "react-native-reanimated";
+import { CalendarStyles } from "../../styles/calendars/Calendar.styles";
 
 type Props = {
     translateY: SharedValue<number>

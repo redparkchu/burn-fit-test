@@ -1,20 +1,20 @@
-import { CalendarStyles } from "../../styles/calendars/Calendar.styles";
-import { StyledDate } from "./Calendar";
-import Date from "./Date";
 import Animated, { SharedValue, useAnimatedStyle } from "react-native-reanimated";
+import { CalendarStyles } from "../../styles/calendars/Calendar.styles";
+import CalendarData from "../../data/calendars/CalendarData";
+import Date from "./Date";
 
 type Props = {
     index: number,
-    styledDates: StyledDate[],
-    selectedDate: string,
-    setSelectedDate: (selectedDate: string) => void,
-    translateY: SharedValue<number>,
-    targetIndex: number
+    calendar: CalendarData,
+    translateY: SharedValue<number>
 }
 
 export default function Week(props: Props) {
+    const calendarData = props.calendar;
+    const week = calendarData.getWeekByIndex(props.index);
+    const targetIndex = calendarData.getWeekIndexByDateId();
     const animatedStyle = useAnimatedStyle(() => {
-        const distance = props.targetIndex * 40;
+        const distance = targetIndex * 40;
         const translateY = -(distance * props.translateY.value / -190)
         return {
             transform: [
@@ -22,16 +22,15 @@ export default function Week(props: Props) {
             ]
         }
     });
+    
     return (
         <Animated.View style={[CalendarStyles.row, animatedStyle]}>
-            {props.styledDates.map((styledDate) => (
-                <Date key={styledDate.date.id} 
-                    color={styledDate.color} 
-                    date={styledDate.date} 
-                    selectedDate={props.selectedDate} 
-                    setSelectedDate={props.setSelectedDate} 
+            {week.map((date) => (
+                <Date key={date.id}
+                    calendar={props.calendar} 
+                    date={date}
+                    isDisplayed={props.index === targetIndex}
                     translateY={props.translateY}
-                    isTarget={props.index === props.targetIndex}
                 />
             ))}
         </Animated.View>
