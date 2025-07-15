@@ -172,6 +172,10 @@ export default class CalendarData {
         return this.weeks[index];
     }
 
+    getCurrentWeek() {
+        return this.weeks[this.weekIndex];
+    }
+
     changeWeekIndex() {
         if (this.mode === "month") {
             this.weekIndex = this.weeks[0][0].date === 1 ? 0 : 1;
@@ -199,5 +203,21 @@ export default class CalendarData {
             return new Date(year, month, 1);
         }
         return new Date(year + 1, 0, 1);
+    }
+
+    static getWeekByDate(date: DateData) {
+        let startDay = new Date(date.year, date.month -1, 1).getDay();
+        let weekIndex = 0;
+        let countDate = 0;
+
+        while (countDate < date.date) {
+            startDay++;
+            countDate++;
+            if (startDay === 7) {
+                startDay = 0;
+                weekIndex++;
+            }
+        }
+        return weekIndex;
     }
 }

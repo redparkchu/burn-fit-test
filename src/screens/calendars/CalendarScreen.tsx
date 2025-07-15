@@ -27,6 +27,16 @@ export default function CalendarScreen() {
         calendar.saveWeekIndex();
     }, [yearMonth]);
 
+    useEffect(() => {
+        const firstDate = calendar.getCurrentWeek()[0];
+        if (mode === "week" && firstDate.month !== yearMonth.month) {
+            const yearMonth = { year: firstDate.year, month: firstDate.month }
+            const weekIndex = CalendarData.getWeekByDate(firstDate);
+            setYearMonth(yearMonth);
+            setWeekIndex(weekIndex);
+        }
+    }, [mode]);
+
     return (
         <SafeAreaScreen>
             <CalendarTopBar calendar={calendar} setYearMonth={setYearMonth} />
